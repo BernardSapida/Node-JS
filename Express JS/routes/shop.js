@@ -1,17 +1,14 @@
-// 3rd Party
 const express = require('express');
-
-// Global
-const path = require('path');
-
-// Root Directory
-const rootDir = require('./../util/path');
-
-// Router
 const router = express.Router();
+const adminData = require('./admin');
 
 router.get('/', (req, res, next) => {
-    res.sendFile(path.join(rootDir, '/views/shop.html'));
+    res.render('shop', {
+        pageTitle: 'Shop',
+        productList: adminData.products,
+        path: '/'
+    });
+    console.log(adminData.products);
 });
 
 module.exports = router;

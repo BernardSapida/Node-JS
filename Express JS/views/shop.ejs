@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./includes/head.ejs') %>
+</head>
+<body>
+    <%- include('./includes/navigation.ejs') %>
+    <main>
+        <section class="container my-5">
+            <h1>My Products</h1>
+            <p>List of all products...</p>
+            <% if(productList.length > 0) { %>
+                <div class="row gap-3">
+                    <% for(product of productList) { %>
+                        <div class="card" style="width: 18rem;">
+                            <img src="<%= product.image %>" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h5 class="card-title m-0"><%= product.title %></h5>
+                                    <p class="badge text-primary fs-5 m-0">$<%= product.price %></p>
+                                </div>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <button class="d-block ms-auto btn btn-outline-primary">Add to cart</button>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+            <% } else { %>
+                <p class="text-center text-secondary">No Products Found!</p>
+            <% } %>
+        </section>
+    </main>
+</body>
+</html>
