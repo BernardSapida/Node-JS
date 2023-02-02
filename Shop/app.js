@@ -11,7 +11,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 // Routes
-const adminData = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const notFoundRoutes = require('./routes/notFound');
 
@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 
-app.use('/admin', adminData.routes);
+app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 app.use(notFoundRoutes);
 

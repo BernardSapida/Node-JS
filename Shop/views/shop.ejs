@@ -9,11 +9,11 @@
         <section class="container my-5">
             <h1>My Products</h1>
             <p>List of all products...</p>
-            <% if(productList.length > 0) { %>
+            <% if(productsList.length > 0) { %>
                 <div class="row gap-3">
-                    <% for(product of productList) { %>
-                        <div class="card" style="width: 18rem;">
-                            <img src="<%= product.image %>" class="card-img-top" alt="...">
+                    <% for(product of productsList) { %>
+                        <div class="card px-0" style="width: 18rem;">
+                            <img src="<%= product.image %>" class="card-img-top" style="height: 150px;" alt="Image Book">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h5 class="card-title m-0"><%= product.title %></h5>
