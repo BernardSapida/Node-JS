@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('./includes/head.ejs') %>
+    </head>
+    <body>
+        <%- include('./includes/navigation.ejs') %>
+        <section class="container my-5">
+            <h1>Users List</h1>
+            <p>Here's the complete list of users...</p>
+            <ul>
+                <% if(usersList.length > 0) { %>
+                    <% for(user of usersList) { %>
+                        <li><%= user %></li>
+                    <% } %>
+                <% } else { %>
+                    <li>No users</li>
+                <% } %>
+            </ul>
+        </section>
+    </body>
+</html>
