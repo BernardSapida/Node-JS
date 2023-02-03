@@ -1,5 +1,5 @@
-const product_model = require('../models/ProductModel');
-const Product = product_model.product;
+const ProductModel = require('../models/ProductModel');
+const Product = ProductModel.product;
 
 // /admin/admin-product => GET
 const getAddProduct = (req, res, next) => {
@@ -18,12 +18,12 @@ const postAddProduct = (req, res, next) => {
     res.redirect('/');
 };
 
-const getProduct = (req, res, next) => {
+const getProducts = (req, res, next) => {
     Product.fetchAll(productsList => {
-        res.render('shop/product-list', {
-            pageTitle: 'Shop',
+        res.render('admin/products', {
+            pageTitle: 'Admin Products',
             productsList: productsList,
-            path: '/shop'
+            path: 'admin/products'
         });
     });
 };
@@ -31,5 +31,5 @@ const getProduct = (req, res, next) => {
 module.exports = {
     getAddProduct: getAddProduct,
     postAddProduct: postAddProduct,
-    getProduct: getProduct
+    getProducts: getProducts
 }

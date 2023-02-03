@@ -12,10 +12,7 @@ app.set('views', 'views');
 
 // Routes
 const shopRoutes = require('./routes/ShopRoutes');
-const productRoutes = require('./routes/ProductRoutes');
-const cartRoutes = require('./routes/CartRoutes');
 const adminRoutes = require('./routes/AdminRoutes');
-const adminProductRoutes = require('./routes/AdminProductRoutes');
 const notFoundRoutes = require('./routes/Page404Routes');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,9 +21,6 @@ app.use(express.static(path.join(__dirname, 'node_modules')));
 
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
-app.use(productRoutes);
-app.use(cartRoutes);
-app.use(adminProductRoutes);
 app.use(notFoundRoutes);
 
 app.listen(3000);
