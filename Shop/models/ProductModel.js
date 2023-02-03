@@ -13,8 +13,9 @@ const getProductsFromFile = callback => {
 }
 
 class Product {
-    constructor(title, image, price) {
+    constructor(title, description, image, price) {
         this.title = title;
+        this.description = description;
         this.image = image;
         this.price = price;
     }

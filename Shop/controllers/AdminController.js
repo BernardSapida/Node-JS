@@ -11,9 +11,11 @@ const getAddProduct = (req, res, next) => {
 
 // /admin/admin-product => POST
 const postAddProduct = (req, res, next) => {
-    const product = new Product(req.body.title, req.body.image, req.body.price);
-    const arr = [];
-    arr.push(product);
+    const title = req.body.title;
+    const description = req.body.description;
+    const image = req.body.image;
+    const price = req.body.price;
+    const product = new Product(title, description, image, price);
     product.save();
     res.redirect('/');
 };

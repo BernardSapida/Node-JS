@@ -7,6 +7,7 @@ const Product = ProductModel.product;
 routes.get('/', ShopController.getIndex);
 routes.get('/products', ShopController.getProducts);
 routes.get('/cart', ShopController.getCart);
+routes.get('/orders', ShopController.getOrders);
 routes.get('/checkout', ShopController.getCheckout);
 
 module.exports = routes;

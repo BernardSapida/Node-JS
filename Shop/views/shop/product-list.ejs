@@ -19,8 +19,10 @@
                                     <h5 class="card-title m-0"><%= product.title %></h5>
                                     <p class="badge text-primary fs-5 m-0">$<%= product.price %></p>
                                 </div>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <button class="d-block ms-auto btn btn-outline-primary">Add to cart</button>
+                                <p class="card-text"><%= product.description %></p>
+                                <form action="/add-to-cart" method="POST">
+                                    <button type="submit" class="d-block ms-auto btn btn-outline-primary">Add to cart</button>
+                                </form>
                             </div>
                         </div>
                     <% } %>
