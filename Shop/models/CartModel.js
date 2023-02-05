@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const dataPath = path.join(
-    path.dirname(require.main.filename),
-    'data/cart.json'
-);
+const dataPath = path.join(path.dirname(require.main.filename), 'data/cart.json');
+const cartPath = path.join(path.dirname(require.main.filename), 'data/cart.json');
 
 class Cart {
     static addProduct(id, productPrice) {
@@ -27,6 +25,27 @@ class Cart {
 
             // Write a file and insert this data
             fs.writeFile(dataPath, JSON.stringify(cart), err => console.log(err));
+        });
+    }
+
+    static deleteProduct(id, productPrice) {
+        fs.readFile(cartPath, (err, data) => {
+            data = JSON.parse(data);
+            let product = data.products[id];
+
+            if(!err && product) {
+                data.totalPrice -= productPrice * product.quantity;
+                delete data.products[id];
+                fs.writeFile(cartPath, JSON.stringify(data), err => console.log(err));
+            }
+        });
+    }
+
+    static getCart(callback) {
+        fs.readFile(cartPath, (err, data) => {
+            const cart = JSON.parse(data);
+            if (!err) callback(cart);
+            else callback(null);
         });
     }
 }

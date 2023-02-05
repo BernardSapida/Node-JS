@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const CartModel = require('./CartModel');
+const Cart = CartModel.cart;
 const dataPath = path.join(
     path.dirname(require.main.filename),
     'data/products.json'
@@ -26,12 +28,22 @@ class Product {
             if(this.id) {
                 const findProductIndex = productsList.findIndex(product => product.id == this.id);
                 productsList[findProductIndex] = this;
-                fs.writeFile(dataPath, JSON.stringify(productsList), err => console.log(err));
             } else {
                 this.id = productsList.length + 1;
                 productsList.push(this);
-                fs.writeFile(dataPath, JSON.stringify(productsList), err => console.log(err));
             }
+            fs.writeFile(dataPath, JSON.stringify(productsList), err => console.log(err));
+        });
+    }
+
+    static deleteById(id) {
+        getProductsFromFile(productsList => {
+            const findProductIndex = productsList.findIndex(product => product.id == id);
+            if(findProductIndex != -1) {
+                let removedProduct = productsList.splice(findProductIndex, 1);
+                Cart.deleteProduct(id, removedProduct[0].price);
+                fs.writeFile(dataPath, JSON.stringify(productsList), err => console.log(err));
+            };
         });
     }
 

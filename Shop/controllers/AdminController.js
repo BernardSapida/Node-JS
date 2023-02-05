@@ -33,7 +33,7 @@ const postEditProduct = (req, res, next) => {
     const title = req.body.title;
     const description = req.body.description;
     const image = req.body.image;
-    const price = req.body.price;
+    const price = Number(req.body.price);
     const product = new Product(id, title, description, image, price);
     product.save();
     res.redirect('/admin/products');
@@ -44,7 +44,7 @@ const postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const description = req.body.description;
     const image = req.body.image;
-    const price = req.body.price;
+    const price = Number(req.body.price);
     const product = new Product(null, title, description, image, price);
     product.save();
     res.redirect('/');
@@ -60,9 +60,16 @@ const getProducts = (req, res, next) => {
     });
 };
 
+const postDeleteProduct = (req, res, next) => {
+    const id = req.body.id;
+    Product.deleteById(id);
+    res.redirect('/admin/products');
+}
+
 module.exports = {
     getEditProduct: getEditProduct,
     postEditProduct: postEditProduct,
     postAddProduct: postAddProduct,
-    getProducts: getProducts
+    getProducts: getProducts,
+    postDeleteProduct: postDeleteProduct
 }
