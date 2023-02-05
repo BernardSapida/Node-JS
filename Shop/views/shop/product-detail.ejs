@@ -7,8 +7,19 @@
     <%- include('./../includes/navigation.ejs') %>
     <main>
         <section class="container my-5">
-            <h1>Product Detail:</h1>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste, impedit quod. Assumenda provident tempore earum quod deserunt quaerat et voluptatibus ratione recusandae beatae sint laudantium odit dolores consequatur veniam aut vitae deleniti, ex maiores modi iste illum culpa illo dolorem. Aliquam id dolores est molestias cupiditate mollitia! Magnam, inventore ex!</p>
+            <h1 class="text-center">Product Detail</h1>
+            <hr>
+            <article class="mx-auto px-0" style="width: 18rem;">
+                <img src="<%= product.image %>" class="card-img-top" style="height: 150px;" alt="Image Book">
+                <div class="">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h5 class="card-title m-0"><%= product.title %></h5>
+                        <p class="badge text-primary fs-5 m-0">$<%= product.price %></p>
+                    </div>
+                    <p class="card-text"><%= product.description %></p>
+                        <%- include('./../includes/add-to-cart.ejs', { product: product}) %>
+                </div>
+            </article>
         </section>
     </main>
     <%- include('./../includes/bootstrapBundle.ejs') %>

@@ -10,23 +10,22 @@
             <h1>My Products</h1>
             <p>List of all products...</p>
             <% if(productsList.length > 0) { %>
-                <div class="row gap-3">
+                <article class="row gap-3">
                     <% for(product of productsList) { %>
-                        <div class="card px-0" style="width: 18rem;">
+                        <article class="card px-0" style="width: 18rem;">
                             <img src="<%= product.image %>" class="card-img-top" style="height: 150px;" alt="Image Book">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <h5 class="card-title m-0"><%= product.title %></h5>
                                     <p class="badge text-primary fs-5 m-0">$<%= product.price %></p>
                                 </div>
-                                <p class="card-text"><%= product.description %></p>
-                                <form action="/add-to-cart" method="POST">
-                                    <button type="submit" class="d-block ms-auto btn btn-outline-primary">Add to cart</button>
-                                </form>
+                                <p class="card-text"><%= product.description.slice(0,122) %>...</p>
+                                <%- include('./../includes/add-to-cart.ejs', { product: product}) %>
+                                <a href="/products/<%= product.id %>" class="d-block w-100 btn btn-outline-dark mt-2">Details</a>
                             </div>
-                        </div>
+                        </article>
                     <% } %>
-                </div>
+                </article>
             <% } else { %>
                 <p class="text-center text-secondary">No Products Found!</p>
             <% } %>

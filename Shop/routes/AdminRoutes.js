@@ -2,14 +2,20 @@ const express = require('express');
 const routes = express.Router();
 const AdminController = require('../controllers/AdminController');
 
-// /admin/admin-product => GET
-routes.get('/add-product', AdminController.getAddProduct);
-
-// /admin/products => GET
+// All products => GET
 routes.get('/products', AdminController.getProducts);
 
-// /admin/admin-product => POST
+// Edit Product => GET
+routes.get('/edit-product', AdminController.getEditProduct);
+
+// Add Product => POST
 routes.post('/add-product', AdminController.postAddProduct);
+
+// Edit Product => GET
+routes.get('/edit-product/:id', AdminController.getEditProduct);
+
+// Edit Product => POST
+routes.post('/edit-product', AdminController.postEditProduct);
 
 module.exports = {
     routes: routes

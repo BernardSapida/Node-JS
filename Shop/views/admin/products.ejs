@@ -19,8 +19,8 @@
                                     <h5 class="card-title m-0"><%= product.title %></h5>
                                     <p class="badge text-primary fs-5 m-0">$<%= product.price %></p>
                                 </div>
-                                <p class="card-text"><%= product.description %></p>
-                                <a href="admin/edit-product" class="w-100 ms-auto btn btn-outline-dark">Edit</a>
+                                <p class="card-text"><%= product.description.slice(0,122) %>...</p>
+                                <a href="edit-product/<%= product.id %>?edit=true" class="w-100 ms-auto btn btn-outline-dark">Edit</a>
                                 <form action="admin/delete-product" method="POST">
                                     <button type="submit" class="w-100 ms-auto btn btn-outline-danger mt-2">Delete</button>
                                 </form>

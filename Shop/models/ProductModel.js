@@ -13,22 +13,37 @@ const getProductsFromFile = callback => {
 }
 
 class Product {
-    constructor(title, description, image, price) {
+    constructor(id, title, description, image, price) {
+        this.id = id;
         this.title = title;
-        this.description = description;
         this.image = image;
+        this.description = description;
         this.price = price;
     }
 
     save() {
         getProductsFromFile(productsList => {
-            productsList.push(this);
-            fs.writeFile(dataPath, JSON.stringify(productsList), err => console.log(err));
-        })
+            if(this.id) {
+                const findProductIndex = productsList.findIndex(product => product.id == this.id);
+                productsList[findProductIndex] = this;
+                fs.writeFile(dataPath, JSON.stringify(productsList), err => console.log(err));
+            } else {
+                this.id = productsList.length + 1;
+                productsList.push(this);
+                fs.writeFile(dataPath, JSON.stringify(productsList), err => console.log(err));
+            }
+        });
     }
 
     static fetchAll(callback) {
         getProductsFromFile(callback);
+    }
+
+    static findById(id, callback) {
+        getProductsFromFile(products => {
+            const product = products.find(product => product.id == id);
+            callback(product);
+        });
     }
 }
 
