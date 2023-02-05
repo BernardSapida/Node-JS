@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const db = require('./util/database');
 
 // Global variables
 const path = require('path');
@@ -22,5 +23,14 @@ app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 app.use(notFoundRoutes);
+
+// Database
+db.execute('SELECT * FROM products')
+    .then(result => {
+        console.log(result);
+    })
+    .catch(err => {
+        console.log(err);
+    });
 
 app.listen(3000);
