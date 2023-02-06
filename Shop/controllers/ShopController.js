@@ -1,77 +1,74 @@
 const ProductModel = require('../models/ProductModel');
-const Product = ProductModel.product;
+const Product = ProductModel.Product;
+
 const CartModel = require('../models/CartModel');
 const Cart = CartModel.cart;
 
-const getIndex = (req, res, next) => {
-    Product.fetchAll(productsList => {
-        res.render('shop/index', {
-            pageTitle: 'Shop',
-            productsList: productsList,
-            path: '/shop'
-        });
+const getIndex = async (req, res, next) => {
+    const productsList = Product.findAll();
+
+    res.render('shop/index', {
+        pageTitle: 'Shop',
+        productsList: productsList,
+        path: '/shop'
     });
 };
 
-const getProducts = (req, res, next) => {
-    Product.fetchAll(productsList => {
-        res.render('shop/product-list', {
-            pageTitle: 'All Products',
-            productsList: productsList,
-            path: '/products'
-        });
+const getProducts = async (req, res, next) => {
+    const productsList = await Product.findAll();
+
+    res.render('shop/product-list', {
+        pageTitle: 'All Products',
+        productsList: productsList,
+        path: '/products'
     });
 };
 
-const getProduct = (req, res, next) => {
+const getProduct = async (req, res, next) => {
     const id = req.params.id;
+    const product = await Product.findByPk(id);
 
-    Product.findById(id, product => {
-        res.render('shop/product-detail', {
-            pageTitle: 'View Product',
-            product: product,
-            path: '/products'
-        });
+    res.render('shop/product-detail', {
+        pageTitle: 'View Product',
+        product: product,
+        path: '/products'
     });
 }
 
 const getCart = (req, res, next) => {
-    Cart.getCart(cart => {
-        Product.fetchAll(products => {
-            const cartProducts = [];
-            let cartProduct;
+    Cart.getCart(async cart => {
+        const products = await Product.findAll()
+        const cartProducts = [];
+        let cartProduct;
 
-            for(product of products) {
-                cartProduct = cart.products[product.id];
-                if(cart.products[product.id]) {
-                    cartProducts.push({ productData: product, quantity: cartProduct.quantity });
-                }
+        for(product of products) {
+            cartProduct = cart.products[product.id];
+            if(cart.products[product.id]) {
+                cartProducts.push({ productData: product, quantity: cartProduct.quantity });
             }
+        }
 
-            res.render('shop/cart', {
-                pageTitle: 'My Cart',
-                cartProducts: cartProducts,
-                path: '/cart' 
-            });
+        res.render('shop/cart', {
+            pageTitle: 'My Cart',
+            cartProducts: cartProducts,
+            path: '/cart' 
         });
     });
 }
 
-const postCart = (req, res, next) => {
+const postCart = async (req, res, next) => {
     const id = req.body.id;
-    Product.findById(id, product => {
-        Cart.addProduct(id, product.price);
-    });
+    const product = await Product.findByPk(id)
+    Cart.addProduct(id, product.price);
     res.redirect('/');
 }
 
-const postCartDeleteItem = (req, res, next) => {
+const postCartDeleteItem = async (req, res, next) => {
     const id = req.body.id;
+    const product = await Product.findByPk(id)
 
-    Product.findById(id, product => {
-        Cart.deleteProduct(id, product.price);
-        res.redirect('/cart');
-    });
+    Cart.deleteProduct(id, product.price);
+    res.redirect('/cart');
 };
 
 const getOrders = (req, res, next) => {

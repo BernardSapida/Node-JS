@@ -26,12 +26,6 @@ app.use(shopRoutes);
 app.use(notFoundRoutes);
 
 // Database
-sequelize.sync()
-    .then(result => {
-        console.log(result);
-    })
-    .catch(err => {
-        console.log(err);
-    });
+sequelize.sync();
 
 app.listen(3000);
