@@ -7,23 +7,31 @@
     <%- include('./../includes/navigation.ejs') %>
     <main>
         <section class="container my-5">
-            <h1>My Cart</h1>
-            <p>List of all products in your cart...</p>
+            <div class="row">
+                <div class="col">
+                    <h1>My Cart</h1>
+                    <p>List of all products in your cart...</p>
+                </div>
+                <form action="/create-order" method="POST" class="col align-self-center">
+                    <button type="submit" class="btn btn-outline-primary d-block ms-auto">Order now</button>
+                </form>
+            </div>
+            <hr>
             <% if(cartProducts.length > 0) { %>
                 <article class="row gap-3">
                     <% for(cart of cartProducts) {  %>
                         <article class="card px-0" style="width: 18rem;">
-                            <img src="<%= cart.productData.imageUrl %>" class="card-img-top" style="height: 150px;" alt="Image Book">
+                            <img src="<%= cart.imageUrl %>" class="card-img-top" style="height: 150px;" alt="Image Book">
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <h5 class="card-title m-0"><%= cart.productData.title %></h5>
-                                    <p class="badge text-primary fs-5 m-0">$<%= cart.productData.price %></p>
+                                    <h5 class="card-title m-0"><%= cart.title %></h5>
+                                    <p class="badge text-primary fs-5 m-0">$<%= cart.price %></p>
                                 </div>
-                                <p class="card-text"><%= cart.productData.description.slice(0,122) %>...</p>
-                                <p><strong>Quantity: </strong> <%= cart.quantity %></p>
-                                <a href="/products/<%= product.id %>" class="d-block w-100 btn btn-outline-dark mt-2">Details</a>
+                                <p class="card-text"><%= cart.description.slice(0,122) %>...</p>
+                                <p><strong>Quantity: </strong> <%= cart.cartitem.quantity %></p>
+                                <a href="/products/<%= cart.id %>" class="d-block w-100 btn btn-outline-dark mt-2">Details</a>
                                 <form action="/cart-delete-item" method="POST">
-                                    <input type="hidden" name="id" value="<%= cart.productData.id %>">
+                                    <input type="hidden" name="id" value="<%= cart.id %>">
                                     <button type="submit" class="d-block w-100 btn btn-outline-danger mt-2">Delete</button>
                                 </form>
                             </div>

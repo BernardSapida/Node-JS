@@ -1,16 +1,16 @@
 const ProductModel = require('../models/ProductModel');
 const Product = ProductModel.Product;
 
-const CartModel = require('../models/CartModel');
-const Cart = CartModel.cart;
+const OrderModel = require('../models/OrderModel');
+const Order = OrderModel.Order;
 
 const getIndex = async (req, res, next) => {
-    const productsList = Product.findAll();
+    const productsList = await Product.findAll();
 
     res.render('shop/index', {
         pageTitle: 'Shop',
         productsList: productsList,
-        path: '/shop'
+        path: '/'
     });
 };
 
@@ -35,39 +35,44 @@ const getProduct = async (req, res, next) => {
     });
 }
 
-const getCart = (req, res, next) => {
-    Cart.getCart(async cart => {
-        const products = await Product.findAll()
-        const cartProducts = [];
-        let cartProduct;
+const getCart = async (req, res, next) => {
+    const cart = await req.user.getCart();
+    const cartProducts = await cart.getProducts();
 
-        for(product of products) {
-            cartProduct = cart.products[product.id];
-            if(cart.products[product.id]) {
-                cartProducts.push({ productData: product, quantity: cartProduct.quantity });
-            }
-        }
+    console.log(cartProducts)
 
-        res.render('shop/cart', {
-            pageTitle: 'My Cart',
-            cartProducts: cartProducts,
-            path: '/cart' 
-        });
+    res.render('shop/cart', {
+        pageTitle: 'My Cart',
+        cartProducts: cartProducts,
+        path: '/cart' 
     });
 }
 
 const postCart = async (req, res, next) => {
     const id = req.body.id;
-    const product = await Product.findByPk(id)
-    Cart.addProduct(id, product.price);
-    res.redirect('/');
+    const cart = await req.user.getCart();
+    const fetchedCart = cart;
+    const products = await cart.getProducts({ where: { id: id } });
+    let newQuantity = 1;
+
+    if(products.length > 0) {
+        const product = products[0];
+        const oldQuantity = product.cartitem.dataValues.quantity;
+        newQuantity += oldQuantity;
+    }
+
+    const product = await Product.findByPk(id);
+    await fetchedCart.addProduct(product, { through: { quantity: newQuantity } });
+    res.redirect('/cart');
 }
 
 const postCartDeleteItem = async (req, res, next) => {
     const id = req.body.id;
-    const product = await Product.findByPk(id)
-
-    Cart.deleteProduct(id, product.price);
+    const cart = await req.user.getCart();
+    const products = await cart.getProducts({ where: { id: id } });
+    const product = products[0];
+    
+    product.cartitem.destroy();
     res.redirect('/cart');
 };
 
@@ -85,6 +90,21 @@ const getCheckout = (req, res, next) => {
     });
 }
 
+const postOrder = async (req, res, next) => {
+    const cart = await req.user.getCart();
+    const fetchedCart = cart;
+    const products = await cart.getProducts();
+    const order = await req.user.createOrder(); 
+
+    await order.addProduct(products.map(product => {
+        product.orderitem = { quantity: product.cartitem.dataValues.quantity };
+        return product;
+    }));
+
+    await fetchedCart.setProducts(null);
+    res.redirect('/orders')
+}
+
 module.exports = {
     getIndex: getIndex,
     getProducts: getProducts,
@@ -92,6 +112,7 @@ module.exports = {
     getCart: getCart,
     postCart: postCart,
     postCartDeleteItem: postCartDeleteItem,
+    postOrder: postOrder,
     getOrders: getOrders,
     getCheckout: getCheckout
 }
