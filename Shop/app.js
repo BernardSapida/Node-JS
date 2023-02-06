@@ -2,7 +2,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const db = require('./util/database');
+const database = require('./util/database');
+const sequelize = database.sequelize;
 
 // Global variables
 const path = require('path');
@@ -25,7 +26,7 @@ app.use(shopRoutes);
 app.use(notFoundRoutes);
 
 // Database
-db.execute('SELECT * FROM products')
+sequelize.sync()
     .then(result => {
         console.log(result);
     })
