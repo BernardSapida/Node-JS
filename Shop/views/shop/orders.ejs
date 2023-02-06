@@ -10,6 +10,19 @@
             <h1>My Orders</h1>
             <p>List of your orders...</p>
         </section>
+        <% if(orders.length > 0) { %>
+            <article class="row gap-3">
+                <% for(order of orders) { %>
+                    <h1><%= order.id %></h1>
+
+                    <% order.products.forEach(product => { %>
+                        <p><%= product.title %> (<%= product.orderitem.quantity %>)</p>
+                    <% }) %>
+                <% } %>
+            </article>
+        <% } else { %>
+            <p class="text-center text-secondary">No Products Found!</p>
+        <% } %>
     </main>
     <%- include('./../includes/bootstrapBundle.ejs') %>
 </body>

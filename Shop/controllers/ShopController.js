@@ -1,9 +1,6 @@
 const ProductModel = require('../models/ProductModel');
 const Product = ProductModel.Product;
 
-const OrderModel = require('../models/OrderModel');
-const Order = OrderModel.Order;
-
 const getIndex = async (req, res, next) => {
     const productsList = await Product.findAll();
 
@@ -76,13 +73,6 @@ const postCartDeleteItem = async (req, res, next) => {
     res.redirect('/cart');
 };
 
-const getOrders = (req, res, next) => {
-    res.render('shop/orders', {
-        pageTitle: 'My Orders',
-        path: '/orders'
-    });
-}
-
 const getCheckout = (req, res, next) => {
     res.render('shop/checkout', {
         pageTitle: 'Checkout',
@@ -103,6 +93,21 @@ const postOrder = async (req, res, next) => {
 
     await fetchedCart.setProducts(null);
     res.redirect('/orders')
+}
+
+const getOrders = async (req, res, next) => {
+    const orders = await req.user.getOrders({ include: ['products']});
+
+    orders.forEach(order => {
+        console.log(order.id)
+        console.log(order)
+    })
+
+    res.render('shop/orders', {
+        pageTitle: 'My Orders',
+        orders: orders,
+        path: '/orders'
+    });
 }
 
 module.exports = {
