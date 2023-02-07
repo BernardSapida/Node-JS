@@ -9,20 +9,27 @@
         <section class="container my-5">
             <h1>My Orders</h1>
             <p>List of your orders...</p>
+            <% if(orders.items.length > 0) { %>
+                <article class="row gap-3">
+                    <h3>Order - #<%= orders._id %></h3>
+                    <% for(order of orders.items) { %>
+                        <div class="card px-0" style="width: 18rem;">
+                            <img src="<%= order.imageURL %>" class="card-img-top" style="height: 150px;" alt="Image Book">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h5 class="card-title m-0"><%= order.title %></h5>
+                                    <p class="badge text-primary fs-5 m-0">$<%= order.price %></p>
+                                </div>
+                                <p class="card-text"><%= order.description.slice(0,122) %>...</p>
+                                <p>Quantity: <%= order.quantity %></p>
+                            </div>
+                        </div>
+                    <% } %>
+                </article>
+            <% } else { %>
+                <p class="text-center text-secondary">No Products Found!</p>
+            <% } %>
         </section>
-        <% if(orders.length > 0) { %>
-            <article class="row gap-3">
-                <% for(order of orders) { %>
-                    <h1><%= order.id %></h1>
-
-                    <% order.products.forEach(product => { %>
-                        <p><%= product.title %> (<%= product.orderitem.quantity %>)</p>
-                    <% }) %>
-                <% } %>
-            </article>
-        <% } else { %>
-            <p class="text-center text-secondary">No Products Found!</p>
-        <% } %>
     </main>
     <%- include('./../includes/bootstrapBundle.ejs') %>
 </body>

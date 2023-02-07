@@ -1,16 +1,17 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://ZShop:ZShop1708131117@zshop.k1sczh5.mongodb.net/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const uri = "mongodb+srv://ZShop:ZShop123@zshop.k1sczh5.mongodb.net/?retryWrites=true&w=majority";
+const mongoClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+let db;
 
-const dbConnection = async (callback) => {
-    client.connect(err => {
-        const collection = client.db("test").collection("devices");
-        
-        // perform actions on the collection object
-        client.close();
-    });
-
-    callback(client);
+const MongoConnect = async (callback) => {
+    const client = await mongoClient.connect();
+    db = client.db("ZShop");
+    callback();
 }
 
-module.exports = dbConnection;
+const getDatabase = () => db ? db : 'No database found!';
+
+module.exports = {
+    MongoConnect: MongoConnect,
+    getDatabase: getDatabase
+};
