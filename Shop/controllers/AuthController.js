@@ -1,12 +1,12 @@
-const getLogin = (req, res, next) => {
-    res.render('auth/login', {
-        pageTitle: 'Login',
-        path: '/login'
+const getSignin = (req, res, next) => {
+    res.render('auth/signin', {
+        pageTitle: 'Sign In',
+        path: '/signin'
     });
 }
 
-const postLogin = (req, res, next) => {
+const postSignin = (req, res, next) => {
 
 }
 
-module.exports = { getLogin,  postLogin }
+module.exports = { getSignin,  postSignin }
