@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
+const session = require('express-session');
 
 // Database configuration with sequelize
 
@@ -22,7 +23,13 @@ app.set('views', 'views');
 // Routes
 const shopRoutes = require('./routes/ShopRoutes');
 const adminRoutes = require('./routes/AdminRoutes');
+const authRoutes = require('./routes/AuthRoutes');
 const notFoundRoutes = require('./routes/Page404Routes');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'node_modules')));
+app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
 
 app.use(async (req, res, next) => {
     const user = await User.findById('63e2fe5f2b753602e86f618a');
@@ -31,12 +38,9 @@ app.use(async (req, res, next) => {
     next();
 });
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'node_modules')));
-
-app.use('/admin', adminRoutes.routes);
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 app.use(notFoundRoutes);
 
 (async function() {

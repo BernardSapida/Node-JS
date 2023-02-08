@@ -1,6 +1,6 @@
 const express = require('express');
 const routes = express.Router();
-const ShopController = require('../controllers/ShopController');
+const ShopController = require('./../controllers/ShopController');
 
 routes.get('/', ShopController.getIndex);
 
