@@ -25,10 +25,8 @@ const adminRoutes = require('./routes/AdminRoutes');
 const notFoundRoutes = require('./routes/Page404Routes');
 
 app.use(async (req, res, next) => {
-    const user = await User.findById('63e2e9afa57f625698de9f7a');
+    const user = await User.findById('63e2fe5f2b753602e86f618a');
     req.user = user;
-
-    console.log(req.user)
 
     next();
 });

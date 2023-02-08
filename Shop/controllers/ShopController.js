@@ -33,8 +33,9 @@ const getProduct = async (req, res, next) => {
 }
 
 const getCart = async (req, res, next) => {
-    const cartProducts = await req.user.getCart();
-    
+    const products = await req.user.populate('cart.items.product');
+    const cartProducts = products.cart.items;
+
     res.render('shop/cart', {
         pageTitle: 'My Cart',
         cartProducts: cartProducts,
