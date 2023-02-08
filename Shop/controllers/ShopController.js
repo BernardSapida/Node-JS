@@ -1,5 +1,8 @@
 const ProductModel = require('../models/ProductModel');
+const OrderModel = require('../models/OrderModel');
+
 const Product = ProductModel.Product;
+const Order = OrderModel.Order;
 
 const getIndex = async (req, res, next) => {
     const productsList = await Product.find();
@@ -65,13 +68,33 @@ const getCheckout = (req, res, next) => {
 }
 
 const postOrder = async (req, res, next) => {
-    await req.user.addOrder();
+    const products = await req.user.populate('cart.items.product');
+    let cartProducts = products.cart.items;
+
+    cartProducts = cartProducts.map(product => {
+        return {
+            quantity: product.quantity,
+            product: { ...product.product._doc }
+        }
+    });
+
+    const order = new Order({
+        user: {
+            name: req.user.name,
+            userId: req.user
+        },
+        products: cartProducts
+    });
+
+    order.save();
+
+    req.user.clearCart();
+
     res.redirect('/orders');
 }
 
 const getOrders = async (req, res, next) => {
-    const ordersRecord = await req.user.getOrders();
-    const orders = ordersRecord[0];
+    const orders = await Order.find({ "user.userId": req.user._id  });
 
     res.render('shop/orders', {
         pageTitle: 'My Orders',

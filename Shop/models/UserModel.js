@@ -49,6 +49,11 @@ userSchema.methods.deleteItemFromCart = function(id) {
     this.save();
 }
 
+userSchema.methods.clearCart = function () {
+    this.cart.items = [];
+    this.save();
+}
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = {
@@ -68,21 +73,5 @@ module.exports = {
 //         const db = getDatabase();
 //         const orders = await db.collection('orders').find({ 'user.id': new ObjectId(this.id) }).toArray();
 //         return orders;
-//     }
-
-//     async addOrder() {
-//         const db = getDatabase();
-//         const products = await this.getCart();
-
-//         const order = {
-//             items: products,
-//             user: {
-//                 id: new ObjectId(this.id),
-//                 name: this.name,
-//             }
-//         }
-
-//         await db.collection('orders').insertOne(order);
-//         return db.collection('users').updateOne({ _id: new ObjectId(this.id) }, { $set: { cart: { items: [] } } });
 //     }
 // }
