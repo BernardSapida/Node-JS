@@ -2,15 +2,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-const mongoose = require('mongoose');
 
 // Database configuration with sequelize
+const database = require('./util/database');
 
 // Models
 const UserModel = require('./models/UserModel');
 
-// Objects / Classes
-const User = UserModel.User;
 
 // Global variables
 const path = require('path');
@@ -25,10 +23,15 @@ const adminRoutes = require('./routes/AdminRoutes');
 const notFoundRoutes = require('./routes/Page404Routes');
 
 app.use(async (req, res, next) => {
-    const user = await User.findById('63e2e9afa57f625698de9f7a');
-    req.user = user;
+    const User = UserModel.User;
+    const user = await User.findById('63e1e055a8f741758e74ac3f');
 
-    console.log(req.user)
+    if(!user) {
+        const user = new User("Bernard Sapida", "bernardsapida1706@gmail.com");
+        user.save();
+    } else {
+        req.user = new User(user.name, user.email, user.cart || [], '63e1e055a8f741758e74ac3f');
+    }
 
     next();
 });
@@ -41,19 +44,5 @@ app.use('/admin', adminRoutes.routes);
 app.use(shopRoutes);
 app.use(notFoundRoutes);
 
-(async function() {
-    await mongoose.connect('mongodb+srv://ZShop:ZShop123@zshop.k1sczh5.mongodb.net/shop?retryWrites=true&w=majority');
-
-    if(!User.findOne()) {
-        const user = new User({
-            name: 'Bernard Sapida',
-            email: 'bernardsapida1706@gmail.com',
-            cart: []
-        });
-
-        user.save();
-    }
-    
-    app.listen(3000);
-})();
+database.MongoConnect(() => app.listen(3000));
 

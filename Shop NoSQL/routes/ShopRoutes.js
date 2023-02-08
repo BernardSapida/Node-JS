@@ -10,15 +10,15 @@ routes.get('/products/delete', ShopController.getProducts);
 
 routes.get('/products/:id', ShopController.getProduct);
 
-// routes.get('/cart', ShopController.getCart);
+routes.get('/cart', ShopController.getCart);
 
-// routes.post('/cart', ShopController.postCart);
+routes.post('/cart', ShopController.postCart);
 
-// routes.post('/cart-delete-item', ShopController.postCartDeleteItem);
+routes.post('/cart-delete-item', ShopController.postCartDeleteItem);
 
-// routes.post('/create-order', ShopController.postOrder);
+routes.post('/create-order', ShopController.postOrder);
 
-// routes.get('/orders', ShopController.getOrders);
+routes.get('/orders', ShopController.getOrders);
 
 // routes.get('/checkout', ShopController.getCheckout);
 

@@ -6,5 +6,5 @@ const page404 = (req, res, next) => {
 };
 
 module.exports = {
-    page404,
+    page404: page404,
 }

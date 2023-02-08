@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./../includes/head.ejs') %>
+</head>
+<body>
+    <%- include('./../includes/navigation.ejs') %>
+    <main>
+        <section class="container my-5">
+            <form action="/admin<%= isEditing ? '/edit-product' : '/add-product' %>" method="POST">
+                <% if(isEditing) { %>
+                    <input type="hidden" class="form-control" id="id" name="id" value="<%= product._id %>">
+                <% } %>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" value="<%= product.title %>" placeholder="Book title">
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Image</label>
+                    <input type="text" class="form-control" id="image" name="image" value="<%= product.imageURL %>" placeholder="Book image url">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="price" name="price" step="1" value="<%= product.price %>" placeholder="Book price">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" name="description" id="description"rows="5" placeholder="Book Descripton"><%= product.description %></textarea>
+                </div>
+                <button class="d-block ms-auto btn btn-primary" type="submit"><%= isEditing ? 'Update' : 'Add product' %></button>
+            </form>
+        </section>
+    </main>
+    <%- include('./../includes/bootstrapBundle.ejs') %>
+</body>
+</html>

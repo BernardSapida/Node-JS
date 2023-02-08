@@ -28,18 +28,14 @@ const getEditProduct = async (req, res, next) => {
 };
 
 // Edit product => Post
-const postEditProduct = async (req, res, next) => {
+const postEditProduct = (req, res, next) => {
     const id = req.body.id;
     const title = req.body.title;
     const price = Number(req.body.price);
     const image = req.body.image;
     const description = req.body.description;
-    const product = await Product.findById(id);
+    const product = new Product(title, price, image, description, id);
 
-    product.title = title;
-    product.price = price;
-    product.image = image;
-    product.description = description;
     product.save();
 
     res.redirect('/admin/products');
@@ -49,16 +45,9 @@ const postEditProduct = async (req, res, next) => {
 const postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const description = req.body.description;
-    const imageURL = req.body.image;
+    const image = req.body.image;
     const price = Number(req.body.price);
-
-    const product = new Product({
-        title: title,
-        price: price, 
-        imageURL: imageURL, 
-        description: description,
-        userId: req.user,
-    });
+    const product = new Product(title, price, image, description, null, req.user);
 
     product.save();
 
@@ -66,7 +55,7 @@ const postAddProduct = (req, res, next) => {
 };
 
 const getProducts = async (req, res, next) => {
-    const productsList = await Product.find();
+    const productsList = await Product.fetchAll();
 
     res.render('admin/products', {
         pageTitle: 'Admin Products',
@@ -75,16 +64,16 @@ const getProducts = async (req, res, next) => {
     });
 };
 
-const postDeleteProduct = async (req, res, next) => {
+const postDeleteProduct = (req, res, next) => {
     const id = req.body.id;
-    await Product.findByIdAndRemove(id);
+    Product.deleteById(id);
     res.redirect('/admin/products');
 }
 
 module.exports = {
-    getEditProduct,
-    postEditProduct,
-    postAddProduct,
-    getProducts,
-    postDeleteProduct
+    getEditProduct: getEditProduct,
+    postEditProduct: postEditProduct,
+    postAddProduct: postAddProduct,
+    getProducts: getProducts,
+    postDeleteProduct: postDeleteProduct
 }

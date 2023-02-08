@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./../includes/head.ejs') %>
+</head>
+<body>
+    <%- include('./../includes/navigation.ejs') %>
+    <main>
+        <section class="container my-5">
+            <h1>Welcome to ZShop!</h1>
+            <p>List of all products...</p>
+            <% if(productsList.length > 0) { %>
+                <article class="row gap-3">
+                    <% for(product of productsList) { %>
+                        <article class="card px-0" style="width: 18rem;">
+                            <img src="<%= product.imageURL %>" class="card-img-top" style="height: 150px;" alt="Image Book">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h5 class="card-title m-0"><%= product.title %></h5>
+                                    <p class="badge text-primary fs-5 m-0">$<%= product.price %></p>
+                                </div>
+                                <p class="card-text"><%= product.description.slice(0,122) %>...</p>
+                                <%- include('./../includes/add-to-cart.ejs', { product: product }) %>
+                                <a href="/products/<%= product._id %>" class="d-block w-100 btn btn-outline-dark mt-2">Details</a>
+                            </div>
+                        </article>
+                    <% } %>
+                </article>
+            <% } else { %>
+                <p class="text-center text-secondary">No Products Found!</p>
+            <% } %>
+        </section>
+    </main>
+    <%- include('./../includes/bootstrapBundle.ejs') %>
+</body>
+</html>

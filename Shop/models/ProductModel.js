@@ -1,46 +1,32 @@
-const ObjectId = require('mongodb').ObjectId;
-const database = require('./../util/database');
-const getDatabase = database.getDatabase;
+const mongoose = require('mongoose');
 
-class Product {
-    constructor(title, price, imageURL, description, id, userId) {
-        this.title = title;
-        this.price = price;
-        this.imageURL = imageURL;
-        this.description = description;
-        this.id = id ? new ObjectId(id) : null;
-        this.userId = userId ? new ObjectId(userId) : null;
+const Schema = mongoose.Schema;
+const productSchema = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    imageURL: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
+});
 
-    save() {
-        const db = getDatabase();
-
-        if(this.id) {
-            db.collection('products').updateOne({ _id: this.id }, { $set: this });
-        } else {
-            const newProduct = db.collection('products').insertOne(this);
-            return newProduct;
-        }
-    }
-
-    static fetchAll() {
-        const db = getDatabase();
-        const products = db.collection('products').find().toArray();
-        return products;
-    }
-
-    static async findById(id) {
-        const db = getDatabase();
-        const product = await db.collection('products').find({ _id: new ObjectId(id) }).next();
-        return product;
-    }
-
-    static async deleteById(id) {
-        const db = getDatabase();
-        await db.collection('products').deleteOne({ _id: new ObjectId(id) });
-    }
-}
+const Product = mongoose.model('Product', productSchema)
 
 module.exports = {
-    Product: Product,
+    Product
 }
