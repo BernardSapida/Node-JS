@@ -1,4 +1,6 @@
-<form action="/cart" method="POST">
-    <input type="hidden" name="id" value="<%= product._id %>">
-    <button type="submit" class="d-block w-100 btn btn-outline-primary">Add to cart</button>
-</form>
+<% if(isAuthenticated) { %>
+    <form action="/cart" method="POST">
+        <input type="hidden" name="id" value="<%= product._id %>">
+        <button type="submit" class="d-block w-100 btn btn-outline-primary">Add to cart</button>
+    </form>
+<% } %>

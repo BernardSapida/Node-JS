@@ -10,6 +10,7 @@ const getIndex = async (req, res, next) => {
     res.render('shop/index', {
         pageTitle: 'Shop',
         productsList: productsList,
+        isAuthenticated: req.session.isAuthenticated,
         path: '/'
     });
 };
@@ -20,6 +21,7 @@ const getProducts = async (req, res, next) => {
     res.render('shop/product-list', {
         pageTitle: 'All Products',
         productsList: productsList,
+        isAuthenticated: req.session.isAuthenticated,
         path: '/products'
     });
 };
@@ -31,6 +33,7 @@ const getProduct = async (req, res, next) => {
     res.render('shop/product-detail', {
         pageTitle: 'View Product',
         product: product,
+        isAuthenticated: req.session.isAuthenticated,
         path: '/products'
     });
 }
@@ -42,6 +45,7 @@ const getCart = async (req, res, next) => {
     res.render('shop/cart', {
         pageTitle: 'My Cart',
         cartProducts: cartProducts,
+        isAuthenticated: req.session.isAuthenticated,
         path: '/cart' 
     });
 }
@@ -63,6 +67,7 @@ const postCartDeleteItem = async (req, res, next) => {
 const getCheckout = (req, res, next) => {
     res.render('shop/checkout', {
         pageTitle: 'Checkout',
+        isAuthenticated: req.session.isAuthenticated,
         path: '/checkout'
     });
 }
@@ -87,9 +92,7 @@ const postOrder = async (req, res, next) => {
     });
 
     order.save();
-
     req.user.clearCart();
-
     res.redirect('/orders');
 }
 
@@ -99,6 +102,7 @@ const getOrders = async (req, res, next) => {
     res.render('shop/orders', {
         pageTitle: 'My Orders',
         orders: orders,
+        isAuthenticated: req.session.isAuthenticated,
         path: '/orders'
     });
 }

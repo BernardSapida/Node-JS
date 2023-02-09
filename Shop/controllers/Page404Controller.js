@@ -1,7 +1,8 @@
 const page404 = (req, res, next) => {
     res.render('notFound', {
-        path: '404',
-        pageTitle: 'Not Found'
+        pageTitle: 'Not Found',
+        isAuthenticated: req.session.isAuthenticated,
+        path: '404'
     });
 };
 

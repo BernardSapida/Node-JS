@@ -1,11 +1,17 @@
 // 3rd Party
 const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
 const mongoose = require('mongoose');
 const session = require('express-session');
+const Store = require('connect-mongodb-session')(session);
 
-// Database configuration with sequelize
+// Initialize
+const MONGO_DB_URI = 'mongodb+srv://ZShop:ZShop123@zshop.k1sczh5.mongodb.net/shop';
+const app = express();
+const store = new Store({
+    uri: MONGO_DB_URI,
+    collection: 'sessions'
+});
 
 // Models
 const UserModel = require('./models/UserModel');
@@ -29,12 +35,12 @@ const notFoundRoutes = require('./routes/Page404Routes');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
-app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
+app.use(session({ secret: 'shop', resave: false, saveUninitialized: false, store: store }));
 
 app.use(async (req, res, next) => {
-    const user = await User.findById('63e2fe5f2b753602e86f618a');
+    if(!req.session.user) return next();
+    const user = await User.findById(req.session.user._id);
     req.user = user;
-
     next();
 });
 
@@ -44,7 +50,7 @@ app.use(authRoutes);
 app.use(notFoundRoutes);
 
 (async function() {
-    await mongoose.connect('mongodb+srv://ZShop:ZShop123@zshop.k1sczh5.mongodb.net/shop?retryWrites=true&w=majority');
+    await mongoose.connect(MONGO_DB_URI);
 
     if(!User.findOne()) {
         const user = new User({

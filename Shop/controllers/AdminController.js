@@ -13,16 +13,18 @@ const getEditProduct = async (req, res, next) => {
 
         res.render('admin/edit-product', {
             pageTitle: 'Edit Product',
-            path: '/admin/edit-product',
             product: product,
-            isEditing: true
+            isEditing: true,
+            isAuthenticated: req.session.isAuthenticated,
+            path: '/admin/edit-product'
         });
     } else {
         res.render('admin/edit-product', {
             pageTitle: 'Add Product',
-            path: '/admin/add-product',
             product: {},
-            isEditing: false
+            isEditing: false,
+            isAuthenticated: req.session.isAuthenticated,
+            path: '/admin/add-product',
         });
     }
 };
@@ -65,16 +67,19 @@ const postAddProduct = (req, res, next) => {
     res.redirect('/admin/products');
 };
 
+// /admin/products => GET
 const getProducts = async (req, res, next) => {
     const productsList = await Product.find();
 
     res.render('admin/products', {
         pageTitle: 'Admin Products',
-        path: '/admin/products',
-        productsList: productsList
+        productsList: productsList,
+        isAuthenticated: req.session.isAuthenticated,
+        path: '/admin/products'
     });
 };
 
+// /admin/products => POST
 const postDeleteProduct = async (req, res, next) => {
     const id = req.body.id;
     await Product.findByIdAndRemove(id);
