@@ -6,6 +6,7 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const Store = require('connect-mongodb-session')(session);
 const { doubleCsrf } = require('csrf-csrf');
+// const csrf = require('csurf');
 
 // Initialize
 const MONGO_DB_URI = 'mongodb+srv://ZShop:ZShop123@zshop.k1sczh5.mongodb.net/shop';
@@ -14,14 +15,7 @@ const store = new Store({
     uri: MONGO_DB_URI,
     collection: 'sessions'
 });
-
-// csrf configuration
-const {
-    invalidCsrfTokenError, // This is just for convenience if you plan on making your own middleware.
-    generateToken, // Use this in your routes to provide a CSRF hash cookie and token.
-    validateRequest, // Also a convenience if you plan on making your own middleware.
-    doubleCsrfProtection, // This is the default CSRF protection middleware.
-} = doubleCsrf({getSecret: () => "secret"});
+// const csrfProtection = csrf();
 
 // Models
 const UserModel = require('./models/UserModel');
@@ -47,7 +41,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, store: store }));
 app.use(cookieParser('secret'));
+
+// csrf configuration
+const doubleCsrfUtilities = doubleCsrf({ getSecret: () => "secret" });
+const {
+    generateToken,
+    doubleCsrfProtection,
+} = doubleCsrfUtilities;
+
 app.use(doubleCsrfProtection);
+// app.use(csrfProtection);
 
 app.use(async (req, res, next) => {
     if(!req.session.user) return next();
@@ -57,8 +60,12 @@ app.use(async (req, res, next) => {
 });
 
 app.use((req, res, next) => {
+    const token = generateToken(res);
+
+    req.headers["x-csrf-token"] = token;
     res.locals.isAuthenticated = req.session.isAuthenticated;
-    res.locals.csrfToken = generateToken(res);
+    res.locals.csrfToken = token;
+    // res.locals.csrfToken = req.csrfToken();
     next();
 });
 

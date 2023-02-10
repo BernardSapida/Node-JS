@@ -13,7 +13,7 @@
                     <p>List of all products in your cart...</p>
                 </div>
                 <form action="/create-order" method="POST" class="col align-self-center">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="x-csrf-token" value="<%= csrfToken %>">
                     <button type="submit" class="btn btn-outline-primary d-block ms-auto">Order now</button>
                 </form>
             </div>
@@ -33,7 +33,7 @@
                                 <a href="/products/<%= cart.product.id %>" class="d-block w-100 btn btn-outline-dark mt-2">Details</a>
                                 <form action="/cart-delete-item" method="POST">
                                     <input type="hidden" name="id" value="<%= cart.product._id %>">
-                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="hidden" name="x-csrf-token" value="<%= csrfToken %>">
                                     <button type="submit" class="d-block w-100 btn btn-outline-danger mt-2">Delete</button>
                                 </form>
                             </div>

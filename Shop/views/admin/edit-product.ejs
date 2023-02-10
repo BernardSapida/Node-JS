@@ -27,7 +27,7 @@
                     <label for="description" class="form-label">Description</label>
                     <textarea class="form-control" name="description" id="description"rows="5" placeholder="Book Descripton"><%= product.description %></textarea>
                 </div>
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="hidden" name="x-csrf-token" value="<%= csrfToken %>">
                 <button class="d-block ms-auto btn btn-primary" type="submit"><%= isEditing ? 'Update' : 'Add product' %></button>
             </form>
         </section>
