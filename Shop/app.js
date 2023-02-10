@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const Store = require('connect-mongodb-session')(session);
+const { doubleCsrf } = require('csrf-csrf');
 
 // Initialize
 const MONGO_DB_URI = 'mongodb+srv://ZShop:ZShop123@zshop.k1sczh5.mongodb.net/shop';
@@ -12,6 +13,9 @@ const store = new Store({
     uri: MONGO_DB_URI,
     collection: 'sessions'
 });
+
+// Configuration
+// const { generateToken } = doubleCsrf();
 
 // Models
 const UserModel = require('./models/UserModel');
@@ -37,6 +41,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(session({ secret: 'shop', resave: false, saveUninitialized: false, store: store }));
 
+// console.log(generateToken())
+
 app.use(async (req, res, next) => {
     if(!req.session.user) return next();
     const user = await User.findById(req.session.user._id);
@@ -51,17 +57,6 @@ app.use(notFoundRoutes);
 
 (async function() {
     await mongoose.connect(MONGO_DB_URI);
-
-    if(!User.findOne()) {
-        const user = new User({
-            name: 'Bernard Sapida',
-            email: 'bernardsapida1706@gmail.com',
-            cart: []
-        });
-
-        user.save();
-    }
-    
     app.listen(3000);
 })();
 

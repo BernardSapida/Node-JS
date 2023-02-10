@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./../includes/head.ejs') %>
+</head>
+<body>
+    <%- include('./../includes/navigation.ejs') %>
+    <main>
+        <section class="container my-5">
+            <h1 class="text-center">Sign Up</h1>
+            <form action="/signup" method="POST" class="mx-auto" style="max-width: 450px;">
+                <div class="mb-4">
+                    <label class="form-label" for="email">Email address</label>
+                    <input type="email" name="email" id="email" class="form-control" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" name="password" class="form-control" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="confirmPassword">Confirm Password</label>
+                    <input type="password" name="confirmPassword" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-primary d-block w-100 mb-4">Create account</button>
+                <div class="text-center">
+                    <p>Already have account? <a href="/signin">Sign In</a></p>
+                </div>
+            </form>
+        </section>
+    </main>
+    <%- include('./../includes/bootstrapBundle.ejs') %>
+</body>
+</html>
