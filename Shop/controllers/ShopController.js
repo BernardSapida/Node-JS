@@ -10,7 +10,6 @@ const getIndex = async (req, res, next) => {
     res.render('shop/index', {
         pageTitle: 'Shop',
         productsList: productsList,
-        isAuthenticated: req.session.isAuthenticated,
         path: '/'
     });
 };

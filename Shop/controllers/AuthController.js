@@ -54,10 +54,7 @@ const postSignup = async (req, res, next) => {
 }
 
 const postSignout = async (req, res, next) => {
-    req.session.destroy((err) => {
-        if(err) console.log(err);
-        res.redirect('/signin');
-    });
+    req.session.destroy(() => res.redirect('/signin'));
 }
 
 module.exports = { getSignin,  postSignin, postSignout, getSignup, postSignup };

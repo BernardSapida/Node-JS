@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const Store = require('connect-mongodb-session')(session);
 const { doubleCsrf } = require('csrf-csrf');
 
@@ -14,8 +15,13 @@ const store = new Store({
     collection: 'sessions'
 });
 
-// Configuration
-// const { generateToken } = doubleCsrf();
+// csrf configuration
+const {
+    invalidCsrfTokenError, // This is just for convenience if you plan on making your own middleware.
+    generateToken, // Use this in your routes to provide a CSRF hash cookie and token.
+    validateRequest, // Also a convenience if you plan on making your own middleware.
+    doubleCsrfProtection, // This is the default CSRF protection middleware.
+} = doubleCsrf({getSecret: () => "secret"});
 
 // Models
 const UserModel = require('./models/UserModel');
@@ -39,14 +45,20 @@ const notFoundRoutes = require('./routes/Page404Routes');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
-app.use(session({ secret: 'shop', resave: false, saveUninitialized: false, store: store }));
-
-// console.log(generateToken())
+app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, store: store }));
+app.use(cookieParser('secret'));
+app.use(doubleCsrfProtection);
 
 app.use(async (req, res, next) => {
     if(!req.session.user) return next();
     const user = await User.findById(req.session.user._id);
     req.user = user;
+    next();
+});
+
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isAuthenticated;
+    res.locals.csrfToken = generateToken(res);
     next();
 });
 
