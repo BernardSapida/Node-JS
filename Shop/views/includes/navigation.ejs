@@ -34,7 +34,7 @@
                             <a class="nav-link <%= path === '/signin' ? 'active' : '' %>" href="/signin">Sign In</a>
                         <% } else { %>
                             <form action="\signout" method="POST">
-                                <input type="hidden" name="x-csrf-token" value="<%= csrfToken %>">
+                                <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
                                 <button type="submit" class="btn btn-dark">Sign Out</button>
                             </form>
                         <% } %>

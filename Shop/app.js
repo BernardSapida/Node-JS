@@ -40,17 +40,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, store: store }));
-app.use(cookieParser('secret'));
 
 // csrf configuration
-const doubleCsrfUtilities = doubleCsrf({ getSecret: () => "secret" });
-const {
-    generateToken,
-    doubleCsrfProtection,
-} = doubleCsrfUtilities;
-
+const { generateToken, doubleCsrfProtection } = doubleCsrf({
+    getSecret: () => "shop",
+    cookieName: "x-csrf-token",
+    getTokenFromRequest: (req) => req.body["csrfToken"]
+});
+app.use(cookieParser('x-csrf-token'));
 app.use(doubleCsrfProtection);
-// app.use(csrfProtection);
 
 app.use(async (req, res, next) => {
     if(!req.session.user) return next();
@@ -60,12 +58,8 @@ app.use(async (req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    const token = generateToken(res);
-
-    req.headers["x-csrf-token"] = token;
     res.locals.isAuthenticated = req.session.isAuthenticated;
-    res.locals.csrfToken = token;
-    // res.locals.csrfToken = req.csrfToken();
+    res.locals.csrfToken = generateToken(res, req);
     next();
 });
 
