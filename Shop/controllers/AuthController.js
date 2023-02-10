@@ -6,6 +6,7 @@ const getSignin = (req, res, next) => {
     res.render('auth/signin', {
         pageTitle: 'Sign In',
         isAuthenticated: false,
+        error: req.flash('error'),
         path: '/signin'
     });
 }
@@ -23,12 +24,16 @@ const postSignin = async (req, res, next) => {
             req.session.save(() => res.redirect('/'));
         }
     }
+
+    req.flash('error', 'Incorrect email address or password!');
+    res.redirect('/signin');
 }
 
 const getSignup = (req, res, next) => {
     res.render('auth/signup', {
         pageTitle: 'Sign In',
         isAuthenticated: false,
+        error: req.flash('error'),
         path: '/signin'
     });
 }
@@ -48,7 +53,7 @@ const postSignup = async (req, res, next) => {
         });
 
         newUser.save();
-    }
+    } else request.flash('error', 'Email already exists!');
 
     res.redirect('/signin');
 }

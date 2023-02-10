@@ -9,6 +9,7 @@
         <section class="container my-5">
             <h1 class="text-center">Sign In</h1>
             <form action="/signin" method="POST" class="mx-auto" style="max-width: 450px;">
+                <div class="py-2 px-3 my-2 bg-danger text-white rounded"><%= error %></div>
                 <div class="mb-4">
                     <label class="form-label" for="email">Email address</label>
                     <input type="email" name="email" id="email" class="form-control" />

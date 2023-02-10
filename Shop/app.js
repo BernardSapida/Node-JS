@@ -6,7 +6,13 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const Store = require('connect-mongodb-session')(session);
 const { doubleCsrf } = require('csrf-csrf');
-// const csrf = require('csurf');
+const flash = require('connect-flash');
+
+// Routes
+const shopRoutes = require('./routes/ShopRoutes');
+const adminRoutes = require('./routes/AdminRoutes');
+const authRoutes = require('./routes/AuthRoutes');
+const notFoundRoutes = require('./routes/Page404Routes');
 
 // Initialize
 const MONGO_DB_URI = 'mongodb+srv://ZShop:ZShop123@zshop.k1sczh5.mongodb.net/shop';
@@ -15,7 +21,13 @@ const store = new Store({
     uri: MONGO_DB_URI,
     collection: 'sessions'
 });
-// const csrfProtection = csrf();
+
+// csrf configuration
+const { generateToken, doubleCsrfProtection } = doubleCsrf({
+    getSecret: () => "shop",
+    cookieName: "x-csrf-token",
+    getTokenFromRequest: (req) => req.body["csrfToken"]
+});
 
 // Models
 const UserModel = require('./models/UserModel');
@@ -30,25 +42,13 @@ const path = require('path');
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
-// Routes
-const shopRoutes = require('./routes/ShopRoutes');
-const adminRoutes = require('./routes/AdminRoutes');
-const authRoutes = require('./routes/AuthRoutes');
-const notFoundRoutes = require('./routes/Page404Routes');
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, store: store }));
-
-// csrf configuration
-const { generateToken, doubleCsrfProtection } = doubleCsrf({
-    getSecret: () => "shop",
-    cookieName: "x-csrf-token",
-    getTokenFromRequest: (req) => req.body["csrfToken"]
-});
 app.use(cookieParser('x-csrf-token'));
 app.use(doubleCsrfProtection);
+app.use(flash());
 
 app.use(async (req, res, next) => {
     if(!req.session.user) return next();
