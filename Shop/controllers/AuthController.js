@@ -1,6 +1,13 @@
 const UserModel = require('./../models/UserModel');
 const User = UserModel.User;
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const sendgridTransaport = require('nodemailer-sendgrid-transport');
+const transporter = nodemailer.createTransport(sendgridTransaport({
+    auth: {
+        api_key: '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'
+    }
+}))
 
 const getSignin = (req, res, next) => {
     res.render('auth/signin', {
@@ -53,6 +60,13 @@ const postSignup = async (req, res, next) => {
         });
 
         newUser.save();
+        res.redirect('/signin');
+        transporter.sendMail({
+            to: email,
+            from: 'shop@sendgrid.net',
+            subject: 'Account successfully created!',
+            html: '<h1>Account successfully created!</h1>'
+        })
     } else request.flash('error', 'Email already exists!');
 
     res.redirect('/signin');

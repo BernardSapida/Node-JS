@@ -24,7 +24,7 @@ const store = new Store({
 
 // csrf configuration
 const { generateToken, doubleCsrfProtection } = doubleCsrf({
-    getSecret: () => "shop",
+    getSecret: () => "secret",
     cookieName: "x-csrf-token",
     getTokenFromRequest: (req) => req.body["csrfToken"]
 });
@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, store: store }));
-app.use(cookieParser('x-csrf-token'));
+app.use(cookieParser('secret'));
 app.use(doubleCsrfProtection);
 app.use(flash());
 
