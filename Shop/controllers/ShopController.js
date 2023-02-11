@@ -7,7 +7,6 @@ const Order = OrderModel.Order;
 const getIndex = async (req, res, next) => {
     const productsList = await Product.find();
 
-    res.set('x-csrf-token', req.headers["x-csrf-token"]);
     res.render('shop/index', {
         pageTitle: 'Shop',
         productsList: productsList,
