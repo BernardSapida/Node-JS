@@ -1,7 +1,7 @@
 const express = require('express');
-const router = express.Router();
+const routes = express.Router();
 const Page404controller = require('./../controllers/Page404Controller');
 
-router.use(Page404controller.page404);
+routes.get(new RegExp(/.+/, "i"), Page404controller.page404);
 
-module.exports = router;
+module.exports = routes;

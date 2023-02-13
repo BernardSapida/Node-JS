@@ -1,13 +1,7 @@
 const UserModel = require('./../models/UserModel');
 const User = UserModel.User;
 const bcrypt = require('bcryptjs');
-// const nodemailer = require('nodemailer');
-// const sendgridTransaport = require('nodemailer-sendgrid-transport');
-// const transporter = nodemailer.createTransport(sendgridTransaport({
-//     auth: {
-//         api_key: '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'
-//     }
-// }))
+const nodemailer = require('nodemailer');
 
 const getSignin = (req, res, next) => {
     res.render('auth/signin', {
@@ -59,20 +53,38 @@ const postSignup = async (req, res, next) => {
              cart: { items: [] }
         });
 
-        newUser.save();
-        return res.redirect('/signin');
-        // const mail = await transporter.sendMail({
-        //     to: email,
-        //     from: 'bernardsapida1706@gmail.com',
-        //     subject: 'Account successfully created!',
-        //     html: '<h1>Account successfully created!</h1>'
-        // })
+        if(password === confirmPassword) {
+            newUser.save();
+            const mailTransporter = nodemailer.createTransport({
+                host: "smtp.gmail.com",
+                port: 587,
+                requireTLS: true,
+                secure: true,
+                service: 'gmail',
+                auth: {
+                    user: 'burgerhub.service@gmail.com',
+                    pass: process.env.APP_PASSWORD
+                }
+            })
+    
+            const data = {
+                to: email,
+                from: 'burgerhub.service@gmail.com',
+                subject: 'Signup successfully!',
+                text: 'Hello World!',
+                html: '<h1>Account successfully created!</h1>'
+            };
+            
+            res.redirect('/signin');
+            // mailTransporter.sendMail(data);
+        } else {
+            req.flash('error', 'Password and confirm password didn\'t matched');
+            res.redirect('/signup');
+        }
     } else {
         req.flash('error', 'Email already exists!');
         res.redirect('/signup');
     }
-
-    
 }
 
 const postSignout = async (req, res, next) => {

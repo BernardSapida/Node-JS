@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const Store = require('connect-mongodb-session')(session);
 const { doubleCsrf } = require('csrf-csrf');
 const flash = require('connect-flash');
+require('dotenv').config();
 
 // Routes
 const shopRoutes = require('./routes/ShopRoutes');
@@ -15,7 +16,7 @@ const authRoutes = require('./routes/AuthRoutes');
 const notFoundRoutes = require('./routes/Page404Routes');
 
 // Initialize
-const MONGO_DB_URI = 'mongodb+srv://ZShop:ZShop123@zshop.k1sczh5.mongodb.net/shop';
+const MONGO_DB_URI = process.env.MONGODB_URI;
 const app = express();
 const store = new Store({
     uri: MONGO_DB_URI,
