@@ -13,7 +13,7 @@ routes.post('/reset-password', AuthController.postResetPassword);
 
 routes.get('/reset-password/:token', AuthController.getUpdatePassword);
 
-routes.post('/update-password', AuthController.postUpdatePassword);
+routes.post('/update-password', validate.updatePassword(), AuthController.postUpdatePassword);
 
 routes.get('/signup', AuthController.getSignup);
 

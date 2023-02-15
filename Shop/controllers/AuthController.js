@@ -62,7 +62,7 @@ const postResetPassword = (req, res, next) => {
         }
 
         user.resetToken = token;
-        user.resetTokenExpiration = new Date.now() + 3600000;
+        user.resetTokenExpiration = Date.now() + 3600000;
         await user.save();
         res.redirect('/');
 
@@ -90,6 +90,8 @@ const getUpdatePassword = async (req, res, next) => {
 
     res.render('auth/update-password', {
         pageTitle: 'Update Password',
+        newPassword: '',
+        confirmPassword: '',
         passwordToken: token,
         userId: user._id.toString(),
         error: req.flash('error'),
@@ -101,6 +103,22 @@ const getUpdatePassword = async (req, res, next) => {
 
 const postUpdatePassword = async (req, res, next) => {
     const { newPassword, confirmPassword, userId, passwordToken } = req.body;
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()) {
+        req.flash('error', errors.array()[0].msg);
+
+        return res.status(422).render('auth/update-password', {
+            pageTitle: 'Update Password',
+            newPassword: newPassword,
+            confirmPassword: confirmPassword,
+            passwordToken: passwordToken,
+            userId: userId,
+            error: req.flash('error'),
+            path: '/reset-password'
+        });
+    }
+
     const user = await User.findOne({ 
         resetToken: passwordToken, 
         resetTokenExpiration: { $gt: Date.now() },
@@ -191,7 +209,7 @@ const sendMail = (email, subject = 'Subject', text = 'Hello World!', html) => {
         html: html
     };
     
-    // mailTransporter.sendMail(data);
+    mailTransporter.sendMail(data);
 }
 
 module.exports = { 
