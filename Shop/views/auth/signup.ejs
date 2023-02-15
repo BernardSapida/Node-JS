@@ -14,15 +14,15 @@
                 <% } %>
                 <div class="mb-4">
                     <label class="form-label" for="email">Email address</label>
-                    <input type="email" name="email" id="email" class="form-control" />
+                    <input type="text" name="email" id="email" class="form-control" value="<%= email %>" />
                 </div>
                 <div class="mb-4">
                     <label class="form-label" for="password">Password</label>
-                    <input type="password" name="password" class="form-control" />
+                    <input type="password" name="password" class="form-control" value="<%= password %>" />
                 </div>
                 <div class="mb-4">
                     <label class="form-label" for="confirmPassword">Confirm Password</label>
-                    <input type="password" name="confirmPassword" class="form-control" />
+                    <input type="password" name="confirmPassword" class="form-control" value="<%= confirmPassword %>" />
                 </div>
                 <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
                 <button type="submit" class="btn btn-primary d-block w-100 mb-4">Create account</button>

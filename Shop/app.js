@@ -31,10 +31,7 @@ const { generateToken, doubleCsrfProtection } = doubleCsrf({
 });
 
 // Models
-const UserModel = require('./models/UserModel');
-
-// Objects / Classes
-const User = UserModel.User;
+const User = require('./models/UserModel');
 
 // Global variables
 const path = require('path');
@@ -61,6 +58,7 @@ app.use(async (req, res, next) => {
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isAuthenticated;
     res.locals.csrfToken = generateToken(res, req);
+    console.log("token generated!");
     next();
 });
 
@@ -69,8 +67,5 @@ app.use(shopRoutes);
 app.use(authRoutes);
 app.use(notFoundRoutes);
 
-(async function() {
-    await mongoose.connect(MONGO_DB_URI);
-    app.listen(3000);
-})();
+mongoose.connect(MONGO_DB_URI).then(() => app.listen(3000));
 

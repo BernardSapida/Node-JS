@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./../includes/head.ejs') %>
+</head>
+<body>
+    <%- include('./../includes/navigation.ejs') %>
+    <main>
+        <section class="container my-5">
+            <h1 class="text-center">Reset Password</h1>
+            <form action="/reset-password" method="POST" class="mx-auto" style="max-width: 450px;">
+                <% if(error.length > 0) { %>
+                    <div class="py-2 px-3 my-2 bg-danger text-white rounded"><%= error %></div>
+                <% } %>
+                <div class="mb-4">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" />
+                </div>
+                <input type="hidden" name="csrfToken" value="<%= csrfToken %>">
+                <button type="submit" class="btn btn-primary d-block w-100 mb-4">Reset Password</button>
+            </form>
+        </section>
+    </main>
+    <%- include('./../includes/bootstrapBundle.ejs') %>
+</body>
+</html>

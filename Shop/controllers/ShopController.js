@@ -1,8 +1,5 @@
-const ProductModel = require('../models/ProductModel');
-const OrderModel = require('../models/OrderModel');
-
-const Product = ProductModel.Product;
-const Order = OrderModel.Order;
+const Product = require('../models/ProductModel');
+const Order = require('../models/OrderModel');
 
 const getIndex = async (req, res, next) => {
     const productsList = await Product.find();
@@ -20,7 +17,6 @@ const getProducts = async (req, res, next) => {
     res.render('shop/product-list', {
         pageTitle: 'All Products',
         productsList: productsList,
-        isAuthenticated: req.session.isAuthenticated,
         path: '/products'
     });
 };
@@ -32,7 +28,6 @@ const getProduct = async (req, res, next) => {
     res.render('shop/product-detail', {
         pageTitle: 'View Product',
         product: product,
-        isAuthenticated: req.session.isAuthenticated,
         path: '/products'
     });
 }
@@ -44,7 +39,6 @@ const getCart = async (req, res, next) => {
     res.render('shop/cart', {
         pageTitle: 'My Cart',
         cartProducts: cartProducts,
-        isAuthenticated: req.session.isAuthenticated,
         path: '/cart' 
     });
 }
@@ -53,7 +47,6 @@ const postCart = async (req, res, next) => {
     const id = req.body.id;
     const product = await Product.findById(id);
     await req.user.addToCart(product);
-
     res.redirect('/cart');
 }
 
@@ -66,7 +59,6 @@ const postCartDeleteItem = async (req, res, next) => {
 const getCheckout = (req, res, next) => {
     res.render('shop/checkout', {
         pageTitle: 'Checkout',
-        isAuthenticated: req.session.isAuthenticated,
         path: '/checkout'
     });
 }
@@ -101,7 +93,6 @@ const getOrders = async (req, res, next) => {
     res.render('shop/orders', {
         pageTitle: 'My Orders',
         orders: orders,
-        isAuthenticated: req.session.isAuthenticated,
         path: '/orders'
     });
 }

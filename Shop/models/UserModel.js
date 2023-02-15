@@ -9,6 +9,12 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    resetToken: {
+        type: String,
+    },
+    resetTokenExpiration: {
+        type: Date
+    },
     cart: {
         items: [
             {
@@ -56,9 +62,7 @@ userSchema.methods.clearCart = function () {
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = {
-    User
-};
+module.exports = User;
 
 // class User {
 //     static findById(id) {
