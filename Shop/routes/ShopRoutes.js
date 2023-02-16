@@ -21,6 +21,8 @@ routes.post('/create-order', isAuth, ShopController.postOrder);
 
 routes.get('/orders', isAuth, ShopController.getOrders);
 
+routes.get('/orders/:orderId', isAuth, ShopController.getInvoice);
+
 // routes.get('/checkout', ShopController.getCheckout);
 
 module.exports = routes;

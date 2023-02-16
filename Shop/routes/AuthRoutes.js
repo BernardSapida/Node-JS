@@ -3,11 +3,6 @@ const routes = express.Router();
 const AuthController = require('./../controllers/AuthController');
 const validate = require('./../util/validate');
 
-routes.use((req, res, next) => {
-    console.log('Next middleware from Auth');
-    next();
-});
-
 routes.get('/signin', AuthController.getSignin);
 
 routes.post('/signin', validate.signin(), AuthController.postSignin);

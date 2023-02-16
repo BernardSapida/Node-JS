@@ -5,7 +5,6 @@ const crypto = require('crypto');
 const { validationResult } = require('express-validator');
 
 const getSignin = (req, res, next) => {
-    console.log('signin');
     res.render('auth/signin', {
         pageTitle: 'Sign In',
         email: '',
@@ -67,15 +66,15 @@ const postResetPassword = (req, res, next) => {
         await user.save();
         res.redirect('/');
 
-        sendMail(
-            email, 
-            'Reset Password', 
-            'Reset Password', 
-            `
-                <p>You requested a password reset.</p>
-                <p>Click this <a href="http://localhost:3000/reset-password/${token}">link</a> to set a new password.</p>
-            `
-        );
+        // sendMail(
+        //     email, 
+        //     'Reset Password', 
+        //     'Reset Password', 
+        //     `
+        //         <p>You requested a password reset.</p>
+        //         <p>Click this <a href="http://localhost:3000/reset-password/${token}">link</a> to set a new password.</p>
+        //     `
+        // );
     });
 }
 
@@ -150,6 +149,8 @@ const getSignup = (req, res, next) => {
 }
 
 const postSignup = async (req, res, next) => {
+    console.log(req.body);
+    
     const { email, password, confirmPassword } = req.body;
     const errors = validationResult(req);
 
@@ -175,12 +176,13 @@ const postSignup = async (req, res, next) => {
 
     newUser.save();
     res.redirect('/signin');
-    sendMail(
-        email, 
-        'Account successfully created!', 
-        'Account successfully created!', 
-        '<p>Account successfully created!</p>'
-    );
+
+    // sendMail(
+    //     email, 
+    //     'Account successfully created!', 
+    //     'Account successfully created!', 
+    //     '<p>Account successfully created!</p>'
+    // );
 }
 
 const postSignout = async (req, res, next) => {

@@ -1,9 +1,8 @@
-const { body } = require('express-validator');
+let { body } = require('express-validator');
 
 const validateProduct = () => {
     return [
         validateTitle(),
-        validateimageURL(),
         validatePrice(),
         validateDescription()
     ];
@@ -13,14 +12,6 @@ const validateTitle = () => {
     return [
         body('title', 'Invalid product title!')
         .isLength({ min: 3 })
-        .trim()
-    ]
-}
-
-const validateimageURL = () => {
-    return [
-        body('imageURL', 'Invalid imageURL url!')
-        .isURL()
         .trim()
     ]
 }

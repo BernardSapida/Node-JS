@@ -1,5 +1,6 @@
 const Product = require('../models/ProductModel');
 const { validationResult } = require('express-validator');
+const file = require('./../util/file');
 
 // Edit product => GET
 const getEditProduct = async (req, res, next) => {
@@ -31,17 +32,19 @@ const getEditProduct = async (req, res, next) => {
 
 // Edit product => Post
 const postEditProduct = async (req, res, next) => {
-    const { id, title, price, imageURL, description } = req.body;
+    const { id, title, price, description } = req.body;
+    const image = req.file;
     const errors = validationResult(req);
 
-    if(!errors.isEmpty()) {
-        req.flash('error', errors.array()[0].msg);
+    if(!errors.isEmpty() || !image) {
+        if(!errors.isEmpty()) req.flash('error', errors.array()[0].msg);
+        else req.flash('error', 'Image file is required! (.png, .jpg or .jpeg)');
 
         return res.status(422).render('admin/edit-product', {
             pageTitle: 'Add Product',
             product: {
                 title: title,
-                imageURL: imageURL,
+                image: image,
                 price: price,
                 description: description,
                 _id: id
@@ -58,9 +61,11 @@ const postEditProduct = async (req, res, next) => {
         return res.redirect('/');
     }
 
+    const imageUrl = image.filename;
+
     product.title = title;
     product.price = price;
-    product.imageURL = imageURL;
+    product.image = imageUrl;
     product.description = description;
     product.save();
 
@@ -69,17 +74,18 @@ const postEditProduct = async (req, res, next) => {
 
 // /admin/add-product => POST
 const postAddProduct = (req, res, next) => {
-    const { title, imageURL, price, description } = req.body;
-    const errors = validationResult(req);
+    const { title, price, description } = req.body;
+    const image = req.file;
+    let errors = validationResult(req);
 
-    if(!errors.isEmpty()) {
-        req.flash('error', errors.array()[0].msg);
+    if(!errors.isEmpty() || !image) {
+        if(!errors.isEmpty()) req.flash('error', errors.array()[0].msg);
+        else req.flash('error', 'Image file is required! (.png, .jpg or .jpeg)');
 
         return res.status(422).render('admin/edit-product', {
             pageTitle: 'Add Product',
             product: {
                 title: title,
-                imageURL: imageURL,
                 price: price,
                 description: description
             },
@@ -89,10 +95,12 @@ const postAddProduct = (req, res, next) => {
         });
     }
 
+    const imageUrl = image.filename;
+
     const product = new Product({
         title: title,
         price: price, 
-        imageURL: imageURL, 
+        image: imageUrl, 
         description: description,
         userId: req.user,
     });
@@ -116,7 +124,9 @@ const getProducts = async (req, res, next) => {
 // /admin/products => POST
 const postDeleteProduct = async (req, res, next) => {
     const id = req.body.id;
+    const product = await Product.findById(id);
     await Product.deleteOne({ _id: id, userId: req.user._id });
+    file.deleteFile(product.image);
     res.redirect('/admin/products');
 }
 

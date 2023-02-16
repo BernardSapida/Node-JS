@@ -7,7 +7,7 @@
     <%- include('./../includes/navigation.ejs') %>
     <main>
         <section class="container my-5">
-            <form action="/admin<%= isEditing ? '/edit-product' : '/add-product' %>" method="POST">
+            <form action="/admin<%= isEditing ? '/edit-product' : '/add-product' %>" method="POST" enctype="multipart/form-data">
                 <% if(error.length > 0) { %>
                     <div class="py-2 px-3 my-2 bg-danger text-white rounded"><%= error %></div>
                 <% } %>
@@ -19,8 +19,8 @@
                     <input type="text" class="form-control" id="title" name="title" value="<%= product.title %>" placeholder="Book title">
                 </div>
                 <div class="mb-3">
-                    <label for="imageURL" class="form-label">Image</label>
-                    <input type="text" class="form-control" id="imageURL" name="imageURL" value="<%= product.imageURL %>" placeholder="Book imageURL url">
+                    <label for="image" class="form-label">Image</label>
+                    <input type="file" class="form-control" id="image" name="image" placeholder="Book image url">
                 </div>
                 <div class="mb-3">
                     <label for="price" class="form-label">Price</label>

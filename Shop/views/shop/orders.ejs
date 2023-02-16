@@ -12,10 +12,10 @@
             <% if(orders.length > 0) { %>
                 <article class="row gap-3">
                     <% for(order of orders) { %>
-                        <h3>Order - #<%= order._id %></h3>
+                        <h3>Order - #<%= order._id %> <a href="/orders/<%= order._id %>" target="_blank">(Invoice)</a></h3>
                         <% for(p of order.products) { %>
                             <div class="card px-0" style="width: 18rem;">
-                                <img src="<%= p.product.imageURL %>" class="card-img-top" style="height: 150px;" alt="imageURL Book">
+                                <img src="<%= p.product.image %>" class="card-img-top" style="height: 150px;" alt="image Book">
                                 <div class="card-body">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <h5 class="card-title m-0"><%= p.product.title %></h5>
