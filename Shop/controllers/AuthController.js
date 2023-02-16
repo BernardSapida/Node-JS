@@ -2,9 +2,10 @@ const User = require('./../models/UserModel');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 
 const getSignin = (req, res, next) => {
+    console.log('signin');
     res.render('auth/signin', {
         pageTitle: 'Sign In',
         email: '',

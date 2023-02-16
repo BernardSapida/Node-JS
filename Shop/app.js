@@ -1,4 +1,5 @@
-// 3rd Party
+const path = require('path');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -9,13 +10,11 @@ const { doubleCsrf } = require('csrf-csrf');
 const flash = require('connect-flash');
 require('dotenv').config();
 
-// Routes
 const shopRoutes = require('./routes/ShopRoutes');
 const adminRoutes = require('./routes/AdminRoutes');
 const authRoutes = require('./routes/AuthRoutes');
 const notFoundRoutes = require('./routes/Page404Routes');
 
-// Initialize
 const MONGO_DB_URI = process.env.MONGODB_URI;
 const app = express();
 const store = new Store({
@@ -32,9 +31,6 @@ const { generateToken, doubleCsrfProtection } = doubleCsrf({
 
 // Models
 const User = require('./models/UserModel');
-
-// Global variables
-const path = require('path');
 
 // Set View Engine
 app.set('view engine', 'ejs');
@@ -58,7 +54,7 @@ app.use(async (req, res, next) => {
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isAuthenticated;
     res.locals.csrfToken = generateToken(res, req);
-    console.log("token generated!");
+    console.log('Token!')
     next();
 });
 
@@ -67,5 +63,5 @@ app.use(shopRoutes);
 app.use(authRoutes);
 app.use(notFoundRoutes);
 
+mongoose.set('strictQuery', true);
 mongoose.connect(MONGO_DB_URI).then(() => app.listen(3000));
-

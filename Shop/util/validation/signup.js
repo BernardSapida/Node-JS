@@ -1,4 +1,4 @@
-const { body } = require('express-validator/check');
+const { body } = require('express-validator');
 const User = require('./../../models/UserModel');
 
 const validateSignup = () => {
@@ -19,7 +19,7 @@ const validateEmail = () => {
     return [
         body('email', 'Please enter a valid email!')
         .isEmail()
-        .normalizeEmail()
+        .trim()
         .custom(async email => {
             const user = await User.findOne({ email: email });
 

@@ -1,5 +1,5 @@
 const Product = require('../models/ProductModel');
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 
 // Edit product => GET
 const getEditProduct = async (req, res, next) => {

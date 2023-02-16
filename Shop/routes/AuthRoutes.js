@@ -3,6 +3,11 @@ const routes = express.Router();
 const AuthController = require('./../controllers/AuthController');
 const validate = require('./../util/validate');
 
+routes.use((req, res, next) => {
+    console.log('Next middleware from Auth');
+    next();
+});
+
 routes.get('/signin', AuthController.getSignin);
 
 routes.post('/signin', validate.signin(), AuthController.postSignin);
@@ -13,7 +18,7 @@ routes.post('/reset-password', AuthController.postResetPassword);
 
 routes.get('/reset-password/:token', AuthController.getUpdatePassword);
 
-routes.post('/update-password', validate.updatePassword(), AuthController.postUpdatePassword);
+routes.put('/update-password', validate.updatePassword(), AuthController.postUpdatePassword);
 
 routes.get('/signup', AuthController.getSignup);
 
