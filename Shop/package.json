@@ -4,7 +4,7 @@
   "description": "Node JS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "nodemon app.js"
   },
   "author": "",
@@ -16,6 +16,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.1",
+    "chai": "^4.3.7",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^3.1.1",
     "cookie-parser": "^1.4.6",
@@ -26,6 +27,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "express-validator": "^6.14.3",
+    "mocha": "^10.2.0",
     "mongodb": "^5.0.0",
     "mongoose": "^6.9.1",
     "multer": "^1.4.5-lts.1",
@@ -33,6 +35,7 @@
     "nodemailer": "^6.9.1",
     "pdfkit": "^0.13.0",
     "sequelize": "^6.28.0",
+    "sinon": "^15.0.1",
     "socket.io": "^4.6.0",
     "socket.io-client": "^4.6.0",
     "xhr2": "^0.2.1"

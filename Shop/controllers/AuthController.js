@@ -149,8 +149,6 @@ const getSignup = (req, res, next) => {
 }
 
 const postSignup = async (req, res, next) => {
-    console.log(req.body);
-    
     const { email, password, confirmPassword } = req.body;
     const errors = validationResult(req);
 
