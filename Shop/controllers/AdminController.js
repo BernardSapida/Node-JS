@@ -1,4 +1,5 @@
 const Product = require('../models/ProductModel');
+const io = require('./../socket');
 const { validationResult } = require('express-validator');
 const file = require('./../util/file');
 
@@ -106,6 +107,10 @@ const postAddProduct = (req, res, next) => {
     });
 
     product.save();
+    io.getIO().emit('newProduct', {
+        action: 'create',
+        product: product
+    });
 
     res.redirect('/admin/products');
 };

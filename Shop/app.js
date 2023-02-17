@@ -9,7 +9,6 @@ const cookieParser = require('cookie-parser');
 const Store = require('connect-mongodb-session')(session);
 const { doubleCsrf } = require('csrf-csrf');
 const flash = require('connect-flash');
-const { body, check } = require('express-validator');
 require('dotenv').config();
 
 const shopRoutes = require('./routes/ShopRoutes');
@@ -58,12 +57,12 @@ app.set('views', 'views');
 
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'node_modules')));
 app.use(express.static(path.join(__dirname, 'images')));
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false, store: store }));
 app.use(cookieParser('secret'));
-// app.use(doubleCsrfProtection);
+app.use(doubleCsrfProtection);
 app.use(flash());
 
 // app.use((req, res, next) => {
@@ -92,4 +91,10 @@ app.use(authRoutes);
 app.use(notFoundRoutes);
 
 mongoose.set('strictQuery', true);
-mongoose.connect(MONGO_DB_URI).then(() => app.listen(3000));
+mongoose.connect(MONGO_DB_URI).then(() => {
+    const server = app.listen(3000);
+    const io = require('./socket').init(server);
+    io.on('connection', socket => {
+        console.log('Client connected!');
+    });
+});
