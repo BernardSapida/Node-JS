@@ -17,7 +17,7 @@ const getSignin = (req, res, next) => {
 const postSignin = async (req, res, next) => {
     const { email, password } = req.body;
     const errors = validationResult(req);
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email.toLowerCase() });
 
     if(!errors.isEmpty()) {
         req.flash('error', errors.array()[0].msg);
@@ -169,7 +169,7 @@ const postSignup = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const newUser = new User({
-         email: email,
+         email: email.toLowerCase(),
          password: hashedPassword,
          cart: { items: [] }
     });
